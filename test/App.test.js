@@ -1,4 +1,4 @@
-/* eslint-env node, jest */
+/* eslint-env node, jest, browser */
 /* eslint-disable react/jsx-filename-extension */
 
 import React from 'react';
