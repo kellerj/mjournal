@@ -1,5 +1,5 @@
 {
-  "ecmaVersion": 6,
+  "ecmaVersion": "7",
   "libs": [],
   "loadEagerly": [],
   "dontLoad": [
@@ -18,6 +18,10 @@
       "load": "",
       "modules": ""
     },
-    "es_modules": {}
+    "es_modules": {},
+    "complete_strings": {
+      "maxLength": 15
+    },
+    "commonjs": {}
   }
 }

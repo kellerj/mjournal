@@ -1,9 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { app, BrowserWindow, Menu } = require('electron');
+const { app } = require('electron');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const electron = require('electron');
+const menuActions = require('./menuActions');
 
 function buildMenu(mainWindow) {
+  menuActions.setMainWindow(mainWindow);
   const template = [];
   if (process.platform === 'darwin') {
     template.push({
@@ -26,9 +28,12 @@ function buildMenu(mainWindow) {
     submenu: [
       {
         label: 'Open Folder...',
+        accelerator: 'CmdOrCtrl+Shift+O',
       },
       {
         label: 'Open File...',
+        accelerator: 'CmdOrCtrl+O',
+        click: menuActions.openFile,
       },
     ],
   });
