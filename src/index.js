@@ -9,3 +9,4 @@ import registerServiceWorker from './registerServiceWorker';
 // eslint-disable-next-line react/jsx-filename-extension
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
+localStorage.debug = 'mjournal:*';

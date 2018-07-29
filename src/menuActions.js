@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { dialog } = require('electron');
 const fs = require('fs');
+const LOG = require('debug')('mjournal:main:menuActions');
 
 let mainWindow = null;
 
@@ -19,11 +20,12 @@ function openFile() {
   if (!files) {
     return;
   }
-  console.log(`Returned File List: ${JSON.stringify(files)}`);
+  LOG(`Returned File List: ${JSON.stringify(files)}`);
   const file = files[0];
   const fileContent = fs.readFileSync(file, 'utf8');
 
-  console.log(fileContent);
+  LOG(fileContent);
+  mainWindow.webContents.send('new-file', fileContent);
 }
 
 module.exports = {
