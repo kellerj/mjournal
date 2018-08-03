@@ -33,6 +33,7 @@ module.exports = {
     "react/jsx-max-props-per-line": ['warn', { "maximum": 2, "when": 'always' }],
     'react/jsx-one-expression-per-line': 'off',
     'react/forbid-component-props': 'off',
+    'react/jsx-max-depth': [ 'warn', { max: 3 }],
   },
   env: {
     node: true,
