@@ -1,5 +1,20 @@
 import styled from 'styled-components';
 
+export const Header = styled.header`
+  background-color: #191324;
+  color: #75717c;
+  font-size: 0.8rem;
+  height: 23px;
+  text-align: center;
+  position: fixed;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10px;
+  -webkit-app-region: drag;
+`;
+
 export const Split = styled.div`
   display: flex;
   height: 100vh;

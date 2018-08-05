@@ -5,7 +5,7 @@ import AceEditor from 'react-ace';
 import 'brace/mode/markdown';
 import 'brace/theme/dracula';
 
-import { Split, CodeWindow, RenderedWindow } from './StructuralComponents.jsx';
+import { Header, Split, CodeWindow, RenderedWindow } from './StructuralComponents.jsx';
 // import logo from './logo.svg';
 import './App.css';
 
@@ -59,6 +59,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Header>Journal</Header>
         <Split>
           <CodeWindow>
             <AceEditor
