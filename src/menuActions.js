@@ -28,7 +28,22 @@ function openFile() {
   mainWindow.webContents.send('new-file', fileContent);
 }
 
+function openDir() {
+  const directories = dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory', 'createDirectory'],
+  });
+  if (!directories) {
+    return;
+  }
+  LOG(`Returned Directory List: ${JSON.stringify(directories)}`);
+  const directory = directories[0];
+  fs.readdir(directory, (err, files) => {
+    LOG(files);
+  });
+}
+
 module.exports = {
   setMainWindow,
   openFile,
+  openDir,
 };

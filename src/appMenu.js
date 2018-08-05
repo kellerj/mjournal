@@ -29,12 +29,13 @@ function buildMenu(mainWindow) {
       {
         label: 'Open Folder...',
         accelerator: 'CmdOrCtrl+Shift+O',
+        click: menuActions.openDir,
       },
-      {
-        label: 'Open File...',
-        accelerator: 'CmdOrCtrl+O',
-        click: menuActions.openFile,
-      },
+      // {
+      //   label: 'Open File...',
+      //   accelerator: 'CmdOrCtrl+O',
+      //   click: menuActions.openFile,
+      // },
     ],
   });
   template.push({

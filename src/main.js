@@ -2,6 +2,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app, BrowserWindow, Menu } = require('electron');
 const appMenu = require('./appMenu');
+// const os = require('os');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+
+const LOG = require('debug')('mjournal:renderer:main');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -10,11 +15,10 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     titleBarStyle: 'hidden',
   });
-
   // and load the index.html of the app.
   mainWindow.loadURL('http://localhost:3000');
 
@@ -23,7 +27,11 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  // BrowserWindow.addDevToolsExtension(`${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.4_0`);
+  installExtension(REACT_DEVELOPER_TOOLS)
+    .then(name => LOG(`Added Extension:  ${name}`))
+    .catch(err => LOG('An error occurred installing react developer tools: ', err));
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
