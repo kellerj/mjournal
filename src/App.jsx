@@ -30,6 +30,12 @@ class App extends Component {
         loadedFile: fileContent,
       });
     });
+    ipcRenderer.on('new-dir', (event, filePaths, directory) => {
+      LOG(filePaths);
+      this.setState({
+        directory,
+      });
+    });
   }
 
   state = {
@@ -64,7 +70,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header>Journal</Header>
+        <Header>Journal: {this.state.directory}</Header>
         <Split>
           <CodeWindow>
             <AceEditor

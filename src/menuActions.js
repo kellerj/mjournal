@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { dialog } = require('electron');
 const fs = require('fs');
+const path = require('path');
 const LOG = require('debug')('mjournal:main:menuActions');
 
 let mainWindow = null;
@@ -38,7 +39,10 @@ function openDir() {
   LOG(`Returned Directory List: ${JSON.stringify(directories)}`);
   const directory = directories[0];
   fs.readdir(directory, (err, files) => {
-    LOG(files);
+    const markdownFiles = files.filter(e => (e.endsWith('.md')));
+    const filePaths = markdownFiles.map(file => path.join(directory, file));
+    LOG(filePaths);
+    mainWindow.webContents.send('new-dir', filePaths, directory);
   });
 }
 
