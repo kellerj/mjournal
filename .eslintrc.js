@@ -34,6 +34,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/forbid-component-props': 'off',
     'react/jsx-max-depth': [ 'warn', { max: 3 }],
+    'react/prefer-stateless-function': 'off',
   },
   env: {
     node: true,

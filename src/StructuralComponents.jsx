@@ -43,3 +43,12 @@ export const CodeWindow = styled.div`
   padding-top: 2rem;
   background-color: #191324;
 `;
+
+export const LoadingMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #191324;
+  height: 100vh;
+`;
