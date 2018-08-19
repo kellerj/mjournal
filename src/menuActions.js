@@ -38,12 +38,13 @@ function openDir() {
   }
   LOG(`Returned Directory List: ${JSON.stringify(directories)}`);
   const directory = directories[0];
-  fs.readdir(directory, (err, files) => {
-    const markdownFiles = files.filter(e => (e.endsWith('.md')));
-    const filePaths = markdownFiles.map(file => path.join(directory, file));
-    LOG(filePaths);
-    mainWindow.webContents.send('new-dir', filePaths, directory);
-  });
+  mainWindow.webContents.send('new-dir', directory);
+  // fs.readdir(directory, (err, files) => {
+  //   const markdownFiles = files.filter(e => (e.endsWith('.md')));
+  //   const filePaths = markdownFiles.map(file => path.join(directory, file));
+  //   LOG(filePaths);
+  //   mainWindow.webContents.send('new-dir', filePaths, directory);
+  // });
 }
 
 module.exports = {

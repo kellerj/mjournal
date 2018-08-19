@@ -1,14 +1,15 @@
+// import fs from 'fs';
+// import path from 'path';
+
 import React, { Component } from 'react';
 import AceEditor from 'react-ace';
-// import brace from 'brace';
+
 import 'brace/mode/markdown';
 import 'brace/theme/dracula';
 
 import { Header, Split, CodeWindow, LoadingMessage } from './StructuralComponents.jsx';
 import AppContext from './AppContext.jsx';
 import MarkdownDisplay from './MarkdownDisplay.jsx';
-// import AppProvider from './AppProvider.jsx';
-// import logo from './logo.svg';
 import './App.css';
 
 let ipcRenderer = null;
@@ -22,9 +23,38 @@ if (window && window.require) {
   // eslint-disable-next-line global-require
   settings = require('electron-settings');
 }
+const fs = window.require('fs');
+const path = window.require('path');
 const LOG = require('debug')('mjournal:renderer:App');
 
 const UPDATE_DELAY_MILLIS = 500;
+
+/* eslint-disable react/require-optimization, react/no-multi-comp */
+
+// class AppProvider extends Component {
+//   constructor(initialState) {
+//     super(initialState);
+//     this.state = initialState;
+//   }
+//   // /* eslint-disable react/no-unused-state */
+//   // state = {
+//   //   loadedFile: '',
+//   //   directory: settings.get('directory') || null,
+//   //   filesData: [],
+//   // }
+//   // /* eslint-enable react/no-unused-state */
+//   setState = (newState) => {
+//     this.setState(newState);
+//   }
+//
+//   render() {
+//     return (
+//       <AppContext.Provider value={this.state}>
+//         {this.props.children}
+//       </AppContext.Provider>
+//     );
+//   }
+// }
 
 class App extends Component {
   constructor() {
@@ -36,19 +66,21 @@ class App extends Component {
         loadedFile: fileContent,
       });
     });
-    ipcRenderer.on('new-dir', (event, filePaths, directory) => {
-      LOG(filePaths);
+    ipcRenderer.on('new-dir', (event, directory) => {
+      LOG(`Received Directory: ${directory}`);
       this.setState({
         directory,
       });
       settings.set('directory', directory);
+      this.loadAndReadFiles(directory);
     });
   }
 
   state = {
     loadedFile: '',
     directory: settings.get('directory') || null,
-  }
+    filesData: [],
+  };
 
   nextRenderTimeMillis = 0;
   finalRefreshHandle = null;
@@ -75,6 +107,19 @@ class App extends Component {
     }
   }
 
+  loadAndReadFiles = (directory) => {
+    fs.readdir(directory, (err, files) => {
+      const markdownFiles = files.filter(e => (e.endsWith('.md')));
+      const filesData = markdownFiles.map(file => ({
+        path: path.join(directory, file),
+      }));
+      LOG(filesData);
+      this.setState({
+        filesData,
+      });
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -82,6 +127,9 @@ class App extends Component {
         <AppContext.Provider value={this.state}>
           {this.state.directory ? (
             <Split>
+              <div>
+                {this.state.filesData.map(file => <h3>{file.path}</h3>)}
+              </div>
               <CodeWindow>
                 <AceEditor
                   mode="markdown" name="markdown_editor"
