@@ -7,7 +7,7 @@ import AceEditor from 'react-ace';
 import 'brace/mode/markdown';
 import 'brace/theme/dracula';
 
-import { Header, Split, CodeWindow, LoadingMessage } from './StructuralComponents.jsx';
+import { AppWrap, Header, FilesWindow, Split, CodeWindow, LoadingMessage } from './StructuralComponents.jsx';
 import AppContext from './AppContext.jsx';
 import MarkdownDisplay from './MarkdownDisplay.jsx';
 import './App.css';
@@ -60,6 +60,11 @@ class App extends Component {
   constructor() {
     super();
 
+    const directory = settings.get('directory');
+    if (directory && fs.existsSync(directory)) {
+      this.loadAndReadFiles(directory);
+    }
+
     ipcRenderer.on('new-file', (event, fileContent) => {
       LOG(fileContent);
       this.setState({
@@ -109,27 +114,41 @@ class App extends Component {
 
   loadAndReadFiles = (directory) => {
     fs.readdir(directory, (err, files) => {
-      const markdownFiles = files.filter(e => (e.endsWith('.md')));
+      const markdownFiles = files.filter(e => (e.endsWith('.md'))).sort().reverse();
       const filesData = markdownFiles.map(file => ({
         path: path.join(directory, file),
+        name: file.substr(0, file.length - 3),
       }));
       LOG(filesData);
       this.setState({
         filesData,
-      });
+      }, () => this.loadFile(0));
     });
+  }
+
+  loadFile = (index) => {
+    const { filesData } = this.state;
+    const content = fs.readFileSync(filesData[index].path, 'utf8');
+
+    this.setState({ loadedFile: content });
   }
 
   render() {
     return (
-      <div className="App">
+      <AppWrap className="App">
         <Header>Journal: {this.state.directory}</Header>
         <AppContext.Provider value={this.state}>
           {this.state.directory ? (
             <Split>
-              <div>
-                {this.state.filesData.map(file => <h3>{file.path}</h3>)}
-              </div>
+              <FilesWindow>
+                {this.state.filesData.map((file, i) => (
+                  <button
+                    key={file.name} onClick={() => this.loadFile(i)}
+                    type="button"
+                  >{file.name}
+                  </button>
+                ))}
+              </FilesWindow>
               <CodeWindow>
                 <AceEditor
                   mode="markdown" name="markdown_editor"
@@ -143,7 +162,7 @@ class App extends Component {
               <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
             )}
         </AppContext.Provider>
-      </div>
+      </AppWrap>
     );
   }
 }

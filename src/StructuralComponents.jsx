@@ -15,6 +15,27 @@ export const Header = styled.header`
   -webkit-app-region: drag;
 `;
 
+export const AppWrap = styled.div`
+  margin-top: 23px;
+`;
+
+export const FilesWindow = styled.div`
+  background: #140F1D;
+  border-right: solid 1px #302b3a;
+  position: relative;
+  width: 20%;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    box-shadow: -10px 0px 20px rgba(0,0,0, 0.3) inset;
+  }
+`;
+
 export const Split = styled.div`
   display: flex;
   height: 100vh;
