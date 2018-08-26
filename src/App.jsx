@@ -10,6 +10,8 @@ import 'brace/theme/dracula';
 import { AppWrap, Header, FilesWindow, Split, CodeWindow, LoadingMessage } from './StructuralComponents.jsx';
 import AppContext from './AppContext.jsx';
 import MarkdownDisplay from './MarkdownDisplay.jsx';
+import FileLink from './components/FileLink.jsx';
+
 import './App.css';
 
 let ipcRenderer = null;
@@ -71,13 +73,14 @@ class App extends Component {
         loadedFile: fileContent,
       });
     });
-    ipcRenderer.on('new-dir', (event, directory) => {
-      LOG(`Received Directory: ${directory}`);
+
+    ipcRenderer.on('new-dir', (event, newDir) => {
+      LOG(`Received Directory: ${newDir}`);
       this.setState({
-        directory,
+        directory: newDir,
       });
-      settings.set('directory', directory);
-      this.loadAndReadFiles(directory);
+      settings.set('directory', newDir);
+      this.loadAndReadFiles(newDir);
     });
   }
 
@@ -122,13 +125,19 @@ class App extends Component {
       LOG(filesData);
       this.setState({
         filesData,
-      }, () => this.loadFile(0));
+      }, () => this.loadFileByIndex(0));
     });
   }
 
-  loadFile = (index) => {
+  loadFileByIndex = (index) => {
     const { filesData } = this.state;
     const content = fs.readFileSync(filesData[index].path, 'utf8');
+
+    this.setState({ loadedFile: content });
+  }
+
+  loadFile = (fileInfo) => {
+    const content = fs.readFileSync(fileInfo.path, 'utf8');
 
     this.setState({ loadedFile: content });
   }
@@ -142,11 +151,10 @@ class App extends Component {
             <Split>
               <FilesWindow>
                 {this.state.filesData.map((file, i) => (
-                  <button
-                    key={file.name} onClick={() => this.loadFile(i)}
-                    type="button"
-                  >{file.name}
-                  </button>
+                  <FileLink
+                    fileInfo={file} key={file.name}
+                    onClick={this.loadFile}
+                  />
                 ))}
               </FilesWindow>
               <CodeWindow>
