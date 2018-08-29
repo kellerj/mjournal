@@ -31,33 +31,7 @@ const LOG = require('debug')('mjournal:renderer:App');
 
 const UPDATE_DELAY_MILLIS = 500;
 
-/* eslint-disable react/require-optimization, react/no-multi-comp */
-
-// class AppProvider extends Component {
-//   constructor(initialState) {
-//     super(initialState);
-//     this.state = initialState;
-//   }
-//   // /* eslint-disable react/no-unused-state */
-//   // state = {
-//   //   loadedFile: '',
-//   //   directory: settings.get('directory') || null,
-//   //   filesData: [],
-//   // }
-//   // /* eslint-enable react/no-unused-state */
-//   setState = (newState) => {
-//     this.setState(newState);
-//   }
-//
-//   render() {
-//     return (
-//       <AppContext.Provider value={this.state}>
-//         {this.props.children}
-//       </AppContext.Provider>
-//     );
-//   }
-// }
-
+/* eslint-disable react/require-optimization */
 class App extends Component {
   constructor() {
     super();
@@ -79,6 +53,7 @@ class App extends Component {
       this.setState({
         directory: newDir,
       });
+      // provider.setDirectory(newDir);
       settings.set('directory', newDir);
       this.loadAndReadFiles(newDir);
     });
@@ -131,16 +106,16 @@ class App extends Component {
     });
   }
 
-  loadFileByIndex = (index) => {
-    const { filesData } = this.state;
-    const content = fs.readFileSync(filesData[index].path, 'utf8');
-
-    this.setState({
-      loadedFile: content,
-      // activeIndex: index,
-      activeFileInfo: filesData[index],
-    });
-  }
+  // loadFileByIndex = (index) => {
+  //   const { filesData } = this.state;
+  //   const content = fs.readFileSync(filesData[index].path, 'utf8');
+  //
+  //   this.setState({
+  //     loadedFile: content,
+  //     // activeIndex: index,
+  //     activeFileInfo: filesData[index],
+  //   });
+  // }
 
   loadFile = (fileInfo) => {
     // const { filesData } = this.state;
