@@ -87,6 +87,8 @@ class App extends Component {
   state = {
     loadedFile: '',
     directory: settings.get('directory') || null,
+    // activeIndex: 0,
+    activeFileInfo: null,
     filesData: [],
   };
 
@@ -133,13 +135,41 @@ class App extends Component {
     const { filesData } = this.state;
     const content = fs.readFileSync(filesData[index].path, 'utf8');
 
-    this.setState({ loadedFile: content });
+    this.setState({
+      loadedFile: content,
+      // activeIndex: index,
+      activeFileInfo: filesData[index],
+    });
   }
 
   loadFile = (fileInfo) => {
+    // const { filesData } = this.state;
     const content = fs.readFileSync(fileInfo.path, 'utf8');
 
-    this.setState({ loadedFile: content });
+    this.setState({
+      loadedFile: content,
+      activeFileInfo: fileInfo,
+      // activeIndex: filesData.indexOf(fileInfo),
+    });
+  }
+
+  saveFile = () => {
+    const { loadedFile, activeFileInfo } = this.state;
+    fs.writeFile(activeFileInfo.path, loadedFile, 'utf8', (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        LOG('saved');
+      }
+    });
+  }
+
+  changeFile = (fileInfo) => {
+    const { activeFileInfo } = this.state;
+    if (fileInfo.name !== activeFileInfo.name) {
+      this.saveFile();
+      this.loadFile(fileInfo);
+    }
   }
 
   render() {
@@ -150,10 +180,10 @@ class App extends Component {
           {this.state.directory ? (
             <Split>
               <FilesWindow>
-                {this.state.filesData.map((file, i) => (
+                {this.state.filesData.map(file => (
                   <FileLink
                     fileInfo={file} key={file.name}
-                    onClick={this.loadFile}
+                    onClick={this.changeFile}
                   />
                 ))}
               </FilesWindow>
