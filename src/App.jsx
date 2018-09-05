@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import AceEditor from 'react-ace';
 
 import 'brace/mode/markdown';
 import 'brace/theme/dracula';
 
-import { AppWrap, Header, FilesWindow, Split, CodeWindow, LoadingMessage } from './StructuralComponents.jsx';
+import { AppWrap, Header, Split, LoadingMessage } from './StructuralComponents.jsx';
 import AppContext, { AppProvider } from './AppContext.jsx';
-import MarkdownDisplay from './MarkdownDisplay.jsx';
-import FileLink from './components/FileLink.jsx';
+import MarkdownPanel from './MarkdownPanel.jsx';
+import FileListPanel from './FileListPanel.jsx';
+import EditorPanel from './EditorPanel.jsx';
 
 import './App.css';
 
@@ -52,24 +52,9 @@ export default class App extends Component {
                 <Split>
                   {context.state.directory ? (
                     <Split>
-                      <FilesWindow>
-                        {context.state.filesData.map(file => (
-                          <FileLink
-                            fileInfo={file} key={file.name}
-                            onClick={context.changeFile}
-                          />
-                        ))}
-                      </FilesWindow>
-                      <CodeWindow>
-                        {<AceEditor
-                          mode="markdown" name="markdown_editor"
-                          // eslint-disable-next-line  react/jsx-no-bind
-                          onChange={this.onEditorChange.bind(this, context)}
-                          theme="dracula"
-                          value={context.state.activeFileContent}
-                         />}
-                      </CodeWindow>
-                      <MarkdownDisplay />
+                      <FileListPanel />
+                      <EditorPanel />
+                      <MarkdownPanel />
                     </Split>) : (
                       <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
                     )}

@@ -8,7 +8,7 @@ import AppContext from './AppContext.jsx';
 
 /* eslint-disable react/require-optimization */
 
-export default class AppProvider extends Component {
+export default class MarkdownPanel extends Component {
   render() {
     return (
       <AppContext.Consumer>
