@@ -40,7 +40,7 @@ export class AppProvider extends Component {
     ipcRenderer.on('new-file', (event, fileContent) => {
       LOG(fileContent);
       this.setState({
-        loadedFile: fileContent,
+        activeFileContent: fileContent,
       });
     });
 
@@ -56,7 +56,7 @@ export class AppProvider extends Component {
   }
 
   state = {
-    loadedFile: '',
+    activeFileContent: '',
     directory: settings.get('directory') || null,
     // activeIndex: 0,
     activeFileInfo: null,
@@ -101,7 +101,7 @@ export class AppProvider extends Component {
   //   const content = fs.readFileSync(filesData[index].path, 'utf8');
   //
   //   this.setState({
-  //     loadedFile: content,
+  //     activeFileContent: content,
   //     // activeIndex: index,
   //     activeFileInfo: filesData[index],
   //   });
@@ -112,15 +112,15 @@ export class AppProvider extends Component {
     const content = fs.readFileSync(fileInfo.path, 'utf8');
 
     this.setState({
-      loadedFile: content,
+      activeFileContent: content,
       activeFileInfo: fileInfo,
       // activeIndex: filesData.indexOf(fileInfo),
     });
   }
 
   saveFile = () => {
-    const { loadedFile, activeFileInfo } = this.state;
-    fs.writeFile(activeFileInfo.path, loadedFile, 'utf8', (err) => {
+    const { activeFileContent, activeFileInfo } = this.state;
+    fs.writeFile(activeFileInfo.path, activeFileContent, 'utf8', (err) => {
       if (err) {
         console.log(err);
       } else {
