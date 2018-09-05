@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { dialog } = require('electron');
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const LOG = require('debug')('mjournal:main:menuActions');
 
 let mainWindow = null;

@@ -14,7 +14,7 @@ export default class AppProvider extends Component {
       <AppContext.Consumer>
         {context => (
           <RenderedWindow>
-            <Markdown>{context.loadedFile}</Markdown>
+            <Markdown>{context.state.loadedFile}</Markdown>
           </RenderedWindow>
         )}
       </AppContext.Consumer>
