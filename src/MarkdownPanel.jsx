@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Markdown from 'markdown-to-jsx';
+import AceEditor from 'react-ace';
+
+import 'brace/mode/markdown';
+import 'brace/theme/dracula';
 
 import { RenderedWindow } from './StructuralComponents.jsx';
 import AppContext from './AppContext.jsx';
 
-// const AppContext = React.createContext('mjournal');
-
 /* eslint-disable react/require-optimization */
-
 export default class MarkdownPanel extends Component {
   render() {
     return (
