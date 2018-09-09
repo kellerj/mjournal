@@ -73,3 +73,22 @@ export const LoadingMessage = styled.div`
   background-color: #191324;
   height: 100vh;
 `;
+
+export const FileButton = styled.button`
+  padding: 10px;
+  width: 100%;
+  background: #191324;
+  opacity: 0.4;
+  color: white;
+  border: none;
+  border-bottom: solid 1px #302b3a;
+  transition: 0.3s ease all;
+  &:hover {
+    opacity: 1.0;
+    border-left: solid 4px #82d8d8;
+  }
+  ${({ active }) => active && `
+    opacity: 1;
+    border-left: solid 4px #82d8d8;
+  `}
+`;

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { FileButton } from '../StructuralComponents.jsx';
+
 export default class FileLink extends Component {
   static propTypes = {
+    active: PropTypes.bool.isRequired,
     fileInfo: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }).isRequired,
@@ -16,11 +19,12 @@ export default class FileLink extends Component {
   render() {
     return (
       <div>
-        <button
+        <FileButton
+          active={this.props.active}
           onClick={this.fileClicked}
           type="button"
         >{this.props.fileInfo.name}
-        </button>
+        </FileButton>
       </div>
     );
   }

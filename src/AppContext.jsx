@@ -18,7 +18,6 @@ const fs = window.require('fs');
 const path = window.require('path');
 const LOG = require('debug')('mjournal:renderer:AppContext');
 
-
 export default AppContext;
 
 /* eslint-disable react/require-optimization */
@@ -44,12 +43,16 @@ export class AppProvider extends Component {
       });
     });
 
+    ipcRenderer.on('save-file', () => {
+      LOG('Save File');
+      this.saveFile();
+    });
+
     ipcRenderer.on('new-dir', (event, newDir) => {
       LOG('Received Directory: %s', newDir);
       this.setState({
         directory: newDir,
       });
-      // provider.setDirectory(newDir);
       settings.set('directory', newDir);
       this.loadAndReadFiles(newDir);
     });
@@ -58,7 +61,6 @@ export class AppProvider extends Component {
   state = {
     activeFileContent: '',
     directory: settings.get('directory') || null,
-    // activeIndex: 0,
     activeFileInfo: null,
     filesData: [],
   };
@@ -88,7 +90,7 @@ export class AppProvider extends Component {
         path: path.join(directory, file),
         name: file.substr(0, file.length - 3),
       }));
-      LOG('%O', filesData);
+      LOG('Read Directory File List: %n%O', filesData);
 
       this.setState({
         filesData,
@@ -96,31 +98,19 @@ export class AppProvider extends Component {
     });
   }
 
-  // loadFileByIndex = (index) => {
-  //   const { filesData } = this.state;
-  //   const content = fs.readFileSync(filesData[index].path, 'utf8');
-  //
-  //   this.setState({
-  //     activeFileContent: content,
-  //     // activeIndex: index,
-  //     activeFileInfo: filesData[index],
-  //   });
-  // }
-
   loadFile = (fileInfo) => {
     LOG('Loading File %o', fileInfo);
-    // const { filesData } = this.state;
     const content = fs.readFileSync(fileInfo.path, 'utf8');
 
     this.setState({
       activeFileContent: content,
       activeFileInfo: fileInfo,
-      // activeIndex: filesData.indexOf(fileInfo),
     });
   }
 
   saveFile = () => {
     const { activeFileContent, activeFileInfo } = this.state;
+    LOG('Saving current editor content to %o', activeFileInfo);
     fs.writeFile(activeFileInfo.path, activeFileContent, 'utf8', (err) => {
       if (err) {
         LOG(err);
@@ -132,6 +122,7 @@ export class AppProvider extends Component {
 
   changeFile = (fileInfo) => {
     const { activeFileInfo } = this.state;
+    LOG('Changing file to %o', fileInfo);
     if (fileInfo.name !== activeFileInfo.name) {
       this.saveFile();
       this.loadFile(fileInfo);

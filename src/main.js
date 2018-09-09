@@ -29,7 +29,7 @@ function createWindow() {
   // Open the DevTools.
   // BrowserWindow.addDevToolsExtension(`${os.homedir()}/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.4_0`);
   installExtension(REACT_DEVELOPER_TOOLS)
-    .then(name => LOG(`Added Extension:  ${name}`))
+    .then(name => LOG('Added Extension: %s', name))
     .catch(err => LOG('An error occurred installing react developer tools: ', err));
   // mainWindow.webContents.openDevTools();
 

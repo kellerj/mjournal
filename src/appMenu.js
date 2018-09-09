@@ -32,6 +32,13 @@ function buildMenu(mainWindow) {
         click: menuActions.openDir,
       },
       {
+        label: 'Save File',
+        accelerator: 'CmdOrCtrl+S',
+        click() {
+          mainWindow.webContents.send('save-file');
+        },
+      },
+      {
         label: 'Open File...',
         accelerator: 'CmdOrCtrl+O',
         click: menuActions.openFile,
