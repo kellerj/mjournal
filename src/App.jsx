@@ -10,13 +10,8 @@ import './App.css';
 
 // const LOG = require('debug')('mjournal:renderer:App');
 
-// const UPDATE_DELAY_MILLIS = 500;
-
 /* eslint-disable react/require-optimization */
 export default class App extends Component {
-  nextRenderTimeMillis = 0;
-  finalRefreshHandle = null;
-
   render() {
     return (
       <AppWrap className="App">
@@ -25,16 +20,14 @@ export default class App extends Component {
             {context => (
               <React.Fragment>
                 <Header>Journal: {context.state.directory}</Header>
-                <Split>
-                  {context.state.directory ? (
-                    <Split>
-                      <FileListPanel />
-                      <EditorPanel />
-                      <MarkdownPanel />
-                    </Split>) : (
-                      <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
-                    )}
-                </Split>
+                {context.state.directory ? (
+                  <Split>
+                    <FileListPanel />
+                    <EditorPanel />
+                    <MarkdownPanel />
+                  </Split>) : (
+                    <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
+                  )}
               </React.Fragment>
             )}
           </AppContext.Consumer>

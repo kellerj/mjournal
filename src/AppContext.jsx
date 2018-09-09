@@ -45,7 +45,7 @@ export class AppProvider extends Component {
     });
 
     ipcRenderer.on('new-dir', (event, newDir) => {
-      LOG(`Received Directory: ${newDir}`);
+      LOG('Received Directory: %s', newDir);
       this.setState({
         directory: newDir,
       });
@@ -88,7 +88,7 @@ export class AppProvider extends Component {
         path: path.join(directory, file),
         name: file.substr(0, file.length - 3),
       }));
-      LOG(filesData);
+      LOG('%O', filesData);
 
       this.setState({
         filesData,
@@ -108,6 +108,7 @@ export class AppProvider extends Component {
   // }
 
   loadFile = (fileInfo) => {
+    LOG('Loading File %o', fileInfo);
     // const { filesData } = this.state;
     const content = fs.readFileSync(fileInfo.path, 'utf8');
 
@@ -122,9 +123,9 @@ export class AppProvider extends Component {
     const { activeFileContent, activeFileInfo } = this.state;
     fs.writeFile(activeFileInfo.path, activeFileContent, 'utf8', (err) => {
       if (err) {
-        console.log(err);
+        LOG(err);
       } else {
-        LOG('saved');
+        LOG('saved editor to %s', activeFileInfo.path);
       }
     });
   }

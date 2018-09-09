@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { dialog } = require('electron');
 const fs = require('fs');
-// const path = require('path');
+
 const LOG = require('debug')('mjournal:main:menuActions');
 
 let mainWindow = null;
@@ -21,11 +21,11 @@ function openFile() {
   if (!files) {
     return;
   }
-  LOG(`Returned File List: ${JSON.stringify(files)}`);
+  LOG('Returned File List: %o', files);
   const file = files[0];
   const fileContent = fs.readFileSync(file, 'utf8');
 
-  LOG(fileContent);
+  // LOG(fileContent);
   mainWindow.webContents.send('new-file', fileContent);
 }
 
@@ -36,7 +36,7 @@ function openDir() {
   if (!directories) {
     return;
   }
-  LOG(`Returned Directory List: ${JSON.stringify(directories)}`);
+  LOG('Returned Directory List: %O', directories);
   const directory = directories[0];
   mainWindow.webContents.send('new-dir', directory);
   // fs.readdir(directory, (err, files) => {

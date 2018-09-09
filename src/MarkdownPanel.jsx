@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import Markdown from 'markdown-to-jsx';
-import AceEditor from 'react-ace';
-
-import 'brace/mode/markdown';
-import 'brace/theme/dracula';
 
 import { RenderedWindow } from './StructuralComponents.jsx';
 import AppContext from './AppContext.jsx';
