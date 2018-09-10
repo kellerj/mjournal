@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import { AppWrap, Header, Split, LoadingMessage } from './StructuralComponents.jsx';
+import { Container, Row, Col } from 'reactstrap';
+
+import { AppWrap, Header, LoadingMessage } from './StructuralComponents.jsx';
 import AppContext, { AppProvider } from './AppContext.jsx';
 import MarkdownPanel from './MarkdownPanel.jsx';
 import FileListPanel from './FileListPanel.jsx';
@@ -21,12 +23,21 @@ export default class App extends Component {
               <React.Fragment>
                 <Header>Journal: {context.state.directory}</Header>
                 {context.state.directory ? (
-                  <Split>
-                    <FileListPanel />
-                    <EditorPanel />
-                    <MarkdownPanel />
-                  </Split>) : (
-                    <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
+                  <Container fluid style={{ padding: 0 }}>
+                    <Row noGutters>
+                      <Col xs="2">
+                        <FileListPanel />
+                      </Col>
+                      <Col xs="5">
+                        <EditorPanel />
+                      </Col>
+                      <Col xs="5">
+                        <MarkdownPanel />
+                      </Col>
+                    </Row>
+                  </Container>
+                ) : (
+                  <LoadingMessage>Use Cmd-Shift-O to open directory.</LoadingMessage>
                   )}
               </React.Fragment>
             )}

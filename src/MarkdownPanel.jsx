@@ -10,7 +10,7 @@ export default class MarkdownPanel extends Component {
     return (
       <AppContext.Consumer>
         {context => (
-          <RenderedWindow>
+          <RenderedWindow style={{ height: '100%' }}>
             <Markdown>{context.state.activeFileContent}</Markdown>
           </RenderedWindow>
         )}
