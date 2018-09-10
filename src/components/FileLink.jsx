@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { FileButton } from '../StructuralComponents.jsx';
+import { ListGroupItem } from 'reactstrap';
 
 export default class FileLink extends Component {
   static propTypes = {
@@ -18,14 +18,12 @@ export default class FileLink extends Component {
 
   render() {
     return (
-      <div>
-        <FileButton
-          active={this.props.active}
-          onClick={this.fileClicked}
-          type="button"
-        >{this.props.fileInfo.name}
-        </FileButton>
-      </div>
+      <ListGroupItem
+        action active={this.props.active}
+        onClick={this.fileClicked}
+        tag="button"
+      >{this.props.fileInfo.name}
+      </ListGroupItem>
     );
   }
 }

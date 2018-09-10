@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ListGroup, Button } from 'reactstrap';
 
 import AppContext from './AppContext.jsx';
 import FileLink from './components/FileLink.jsx';
@@ -13,13 +14,15 @@ export default class MarkdownPanel extends Component {
           const { filesData, activeFileInfo } = context.state;
           return (
             <FilesWindow>
-              {filesData.map(file => (
-                <FileLink
-                  active={activeFileInfo && file.name === activeFileInfo.name}
-                  fileInfo={file} key={file.name}
-                  onClick={context.changeFile}
-                />
-              ))}
+              <ListGroup>
+                {filesData.map(file => (
+                  <FileLink
+                    active={activeFileInfo && file.name === activeFileInfo.name}
+                    fileInfo={file} key={file.name}
+                    onClick={context.changeFile}
+                  />
+                ))}
+              </ListGroup>
             </FilesWindow>);
         }}
       </AppContext.Consumer>
