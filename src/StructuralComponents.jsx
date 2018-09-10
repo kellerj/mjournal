@@ -42,13 +42,12 @@ export const AppWrap = styled.div`
 // `;
 
 export const RenderedWindow = styled.div`
-  background-color: #191324;
-  color: white;
+  color: black;
   h1, h2, h3, h4, h5, h6 {
-    color: #82d8d8;
+    color: black;
   }
   h1 {
-    border-bottom: solid 3px red;
+    border-bottom: solid 3px blue;
     padding-bottom: 10px;
   }
   a {
@@ -59,7 +58,7 @@ export const RenderedWindow = styled.div`
 export const CodeWindow = styled.div`
   flex: 1;
   padding-top: 2rem;
-  background-color: #191324;
+  ${''}
 `;
 
 export const LoadingMessage = styled.div`
@@ -67,6 +66,6 @@ export const LoadingMessage = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  background-color: #191324;
+  ${''}
   height: 100vh;
 `;

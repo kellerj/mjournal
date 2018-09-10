@@ -15,7 +15,7 @@ export default class MarkdownPanel extends Component {
             <ListGroup flush>
               {filesData.map(file => (
                 <FileLink
-                  active={activeFileInfo && file.name === activeFileInfo.name}
+                  active={activeFileInfo ? file.name === activeFileInfo.name : false}
                   fileInfo={file} key={file.name}
                   onClick={context.changeFile}
                 />
