@@ -39,6 +39,7 @@ function openDir() {
   LOG('Returned Directory List: %O', directories);
   const directory = directories[0];
   mainWindow.webContents.send('new-dir', directory);
+  mainWindow.setTitle(`Markdown Journal: ${directory}`);
   // fs.readdir(directory, (err, files) => {
   //   const markdownFiles = files.filter(e => (e.endsWith('.md')));
   //   const filePaths = markdownFiles.map(file => path.join(directory, file));

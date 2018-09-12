@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app, BrowserWindow, Menu } = require('electron');
 const appMenu = require('./appMenu');
-// const os = require('os');
+const fs = require('fs');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
@@ -12,12 +12,14 @@ const LOG = require('debug')('mjournal:renderer:main');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+const settings = require('electron-settings');
+
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    titleBarStyle: 'hidden',
+    // titleBarStyle: 'hidden',
   });
   // and load the index.html of the app.
   mainWindow.loadURL('http://localhost:3000');
@@ -32,6 +34,10 @@ function createWindow() {
     .then(name => LOG('Added Extension: %s', name))
     .catch(err => LOG('An error occurred installing react developer tools: ', err));
   // mainWindow.webContents.openDevTools();
+  const directory = settings.get('directory');
+  if (directory && fs.existsSync(directory)) {
+    mainWindow.setTitle(`Markdown Journal: ${directory}`);
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
