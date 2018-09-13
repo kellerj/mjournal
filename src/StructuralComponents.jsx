@@ -43,6 +43,8 @@ import styled from 'styled-components';
 // `;
 
 export const RenderedWindow = styled.div`
+  border-left: solid 1px black;
+  padding: 1em;
   color: black;
   h1, h2, h3, h4, h5, h6 {
     color: black;
@@ -57,9 +59,6 @@ export const RenderedWindow = styled.div`
 `;
 
 export const CodeWindow = styled.div`
-  flex: 1;
-  padding-top: 2rem;
-  ${''}
 `;
 
 export const LoadingMessage = styled.div`
@@ -67,6 +66,5 @@ export const LoadingMessage = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  ${''}
   height: 100vh;
 `;

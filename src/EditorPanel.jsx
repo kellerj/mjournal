@@ -18,19 +18,20 @@ export default class EditorPanel extends Component {
     context.setActiveFileContent(newContent);
   }
 
-  // this.onEditorChange.bind(this, context)
   render() {
     return (
       <AppContext.Consumer>
         {context => (
           <CodeWindow>
             <AceEditor
-              debounceChangePeriod={500} mode="markdown"
+              debounceChangePeriod={500}
+              mode="markdown"
               name="markdown_editor"
               // eslint-disable-next-line  react/jsx-no-bind
               onChange={this.onEditorChange.bind(this, context)}
               theme="github"
               value={context.state.activeFileContent}
+              wrapEnabled
             />
           </CodeWindow>
         )}
