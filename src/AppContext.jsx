@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+if (window && window.require) {
+  require = window.require;
+}
+
+const util = require('util');
+const fs = require('fs');
+const path = require('path');
+const LOG = require('debug')('mjournal:renderer:AppContext');
+
+const readDirAsync = util.promisify(fs.readdir);
+
 const AppContext = React.createContext();
 
 let ipcRenderer = null;
@@ -14,9 +25,6 @@ if (window && window.require) {
   // eslint-disable-next-line global-require
   settings = require('electron-settings');
 }
-const fs = window.require('fs');
-const path = window.require('path');
-const LOG = require('debug')('mjournal:renderer:AppContext');
 
 export default AppContext;
 
@@ -83,7 +91,18 @@ export class AppProvider extends Component {
     this.setState({ fileList }, cb);
   }
 
-  loadAndReadFiles = (directory) => {
+  loadAndReadFiles = async (directory) => {
+    // read directories in the given directory
+    const mainDirFiles = await readDirAsync(directory);
+    LOG('Files in base directory: %o', mainDirFiles);
+    mainDirFiles.filter((file) => {
+      const fileInfo = fs.statSync(path.join(directory, file));
+      LOG('%s: %o', file, fileInfo);
+      return fileInfo.isDirectory();
+    });
+    // if no current dir set or does not exist, then select the first one and make it the current one
+
+    // read given directory and set file list
     fs.readdir(directory, (err, files) => {
       const markdownFiles = files.filter(e => (e.endsWith('.md'))).sort().reverse();
       const filesData = markdownFiles.map(file => ({

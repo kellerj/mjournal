@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup } from 'reactstrap';
+import { ListGroup, Nav, NavItem, NavLink } from 'reactstrap';
 
 import AppContext from './AppContext.jsx';
 import FileLink from './components/FileLink.jsx';
@@ -12,15 +12,22 @@ export default class MarkdownPanel extends Component {
         {(context) => {
           const { filesData, activeFileInfo } = context.state;
           return (
-            <ListGroup flush>
-              {filesData.map(file => (
-                <FileLink
-                  active={activeFileInfo ? file.name === activeFileInfo.name : false}
-                  fileInfo={file} key={file.name}
-                  onClick={context.changeFile}
-                />
-              ))}
-            </ListGroup>
+            <React.Fragment>
+              <Nav tabs>
+                <NavItem><NavLink href="#">Work Log</NavLink></NavItem>
+                <NavItem><NavLink href="#">Weekly Summary</NavLink></NavItem>
+                <NavItem><NavLink href="#">Project Audits</NavLink></NavItem>
+              </Nav>
+              <ListGroup flush>
+                {filesData.map(file => (
+                  <FileLink
+                    active={activeFileInfo ? file.name === activeFileInfo.name : false}
+                    fileInfo={file} key={file.name}
+                    onClick={context.changeFile}
+                  />
+                ))}
+              </ListGroup>
+            </React.Fragment>
           );
         }}
       </AppContext.Consumer>
