@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 if (window && window.require) {
-  require = window.require;
+  // eslint-disable-next-line no-global-assign,no-native-reassign
+  ({ require } = window);
 }
 
 const util = require('util');
@@ -58,19 +59,16 @@ export class AppProvider extends Component {
 
     ipcRenderer.on('new-dir', (event, newDir) => {
       LOG('Received Directory: %s', newDir);
-      this.setState({
-        directory: newDir,
-      });
-      settings.set('directory', newDir);
-      this.loadAndReadFiles(newDir);
+      this.setDirectory(newDir);
     });
   }
 
   state = {
     activeFileContent: '',
-    directory: settings.get('directory') || null,
     activeFileInfo: null,
-    filesData: [],
+    mainDirectory: settings.get('directory') || null,
+    currentCategory: null,
+    fileList: [],
   };
 
   setActiveFileContent = (fileContent, cb) => {
@@ -83,25 +81,43 @@ export class AppProvider extends Component {
 
   setDirectory = (newDir, cb) => {
     this.setState({
-      directory: newDir,
+      mainDirectory: newDir,
     }, cb);
+    settings.set('directory', newDir);
+    this.loadAndReadFiles(newDir);
   }
 
   setFileList = (fileList, cb) => {
     this.setState({ fileList }, cb);
   }
 
-  loadAndReadFiles = async (directory) => {
+  loadCategories = async (directory) => {
     // read directories in the given directory
     const mainDirFiles = await readDirAsync(directory);
     LOG('Files in base directory: %o', mainDirFiles);
-    mainDirFiles.filter((file) => {
+    const categories = mainDirFiles.filter((file) => {
       const fileInfo = fs.statSync(path.join(directory, file));
       LOG('%s: %o', file, fileInfo);
       return fileInfo.isDirectory();
-    });
-    // if no current dir set or does not exist, then select the first one and make it the current one
+    }).map(dirName => ({
+      dirName,
+      fullPath: path.join(directory, dirName),
+      name: dirName.replace(/_/g, ' '),
+    }));
+    // If there are no directories, create a default
 
+    LOG('Sub-Directories/Categories: %o', categories);
+    let category = this.state.category
+      || categories.find(e => (e.name === this.state.category.name));
+    // if no current dir set or does not exist, then select the first one and make it the current one
+    if (!category) {
+      category = categories[0];
+      this.setState({ currentCategory: category });
+    }
+    this.loadAndReadFiles(category.fullPath);
+  }
+
+  loadAndReadFiles = async (directory) => {
     // read given directory and set file list
     fs.readdir(directory, (err, files) => {
       const markdownFiles = files.filter(e => (e.endsWith('.md'))).sort().reverse();
@@ -112,7 +128,7 @@ export class AppProvider extends Component {
       LOG('Read Directory File List: %n%O', filesData);
 
       this.setState({
-        filesData,
+        fileList: filesData,
       }, () => this.loadFile(filesData[0]));
     });
   }
@@ -120,11 +136,7 @@ export class AppProvider extends Component {
   loadFile = (fileInfo) => {
     LOG('Loading File %o', fileInfo);
     const content = fs.readFileSync(fileInfo.path, 'utf8');
-
-    this.setState({
-      activeFileContent: content,
-      activeFileInfo: fileInfo,
-    });
+    this.setActiveFile(fileInfo, content);
   }
 
   saveFile = () => {

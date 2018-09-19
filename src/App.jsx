@@ -19,7 +19,7 @@ export default class App extends Component {
       <AppProvider>
         <AppContext.Consumer>
           {context => (
-            context.state.directory ? (
+            context.state.mainDirectory ? (
               <Container fluid style={{ padding: 0 }}>
                 <Row noGutters>
                   <Col xs="2">

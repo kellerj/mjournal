@@ -10,7 +10,7 @@ export default class MarkdownPanel extends Component {
     return (
       <AppContext.Consumer>
         {(context) => {
-          const { filesData, activeFileInfo } = context.state;
+          const { fileList, activeFileInfo } = context.state;
           return (
             <React.Fragment>
               <Nav tabs>
@@ -19,7 +19,7 @@ export default class MarkdownPanel extends Component {
                 <NavItem><NavLink href="#">Project Audits</NavLink></NavItem>
               </Nav>
               <ListGroup flush>
-                {filesData.map(file => (
+                {fileList.map(file => (
                   <FileLink
                     active={activeFileInfo ? file.name === activeFileInfo.name : false}
                     fileInfo={file} key={file.name}

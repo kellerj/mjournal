@@ -36,16 +36,10 @@ function openDir() {
   if (!directories) {
     return;
   }
-  LOG('Returned Directory List: %O', directories);
+  LOG('Open Dialog Returned Directory List: %O', directories);
   const directory = directories[0];
   mainWindow.webContents.send('new-dir', directory);
   mainWindow.setTitle(`Markdown Journal: ${directory}`);
-  // fs.readdir(directory, (err, files) => {
-  //   const markdownFiles = files.filter(e => (e.endsWith('.md')));
-  //   const filePaths = markdownFiles.map(file => path.join(directory, file));
-  //   LOG(filePaths);
-  //   mainWindow.webContents.send('new-dir', filePaths, directory);
-  // });
 }
 
 module.exports = {
