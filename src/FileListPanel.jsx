@@ -1,23 +1,53 @@
 import React, { Component } from 'react';
-import { ListGroup, Nav, NavItem, NavLink } from 'reactstrap';
+import { ListGroup, Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import AppContext from './AppContext.jsx';
 import FileLink from './components/FileLink.jsx';
 
+// constructor(props) {
+//   super(props);
+//
+//   this.toggle = this.toggle.bind(this);
+//   this.state = {
+//     dropdownOpen: false
+//   };
+// }
+//
+// toggle() {
+//   this.setState({
+//     dropdownOpen: !this.state.dropdownOpen
+//   });
+// }
+// <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+//
+
 /* eslint-disable react/require-optimization */
-export default class MarkdownPanel extends Component {
+export default class FileListPanel extends Component {
   render() {
     return (
       <AppContext.Consumer>
         {(context) => {
-          const { fileList, activeFileInfo } = context.state;
+          const {
+            fileList, activeFileInfo, categoryList, currentCategory,
+          } = context.state;
           return (
             <React.Fragment>
-              <Nav tabs>
-                <NavItem><NavLink href="#">Work Log</NavLink></NavItem>
-                <NavItem><NavLink href="#">Weekly Summary</NavLink></NavItem>
-                <NavItem><NavLink href="#">Project Audits</NavLink></NavItem>
-              </Nav>
+              {categoryList.length && currentCategory ? (
+                <Nav pills>
+                  <Dropdown
+                    isOpen={false} nav
+                    toggle={() => {}}
+                  >
+                    <DropdownToggle caret nav>
+                      Category: {currentCategory.name}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {categoryList.map(cat => (
+                        <DropdownItem key={cat.dirName}>{cat.name}</DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                </Nav>) : ''}
               <ListGroup flush>
                 {fileList.map(file => (
                   <FileLink

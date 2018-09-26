@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 if (window && window.require) {
   // eslint-disable-next-line no-global-assign,no-native-reassign
-  ({ require } = window);
+  require = window.require;
 }
 
 const util = require('util');
@@ -42,7 +42,7 @@ export class AppProvider extends Component {
 
     const directory = settings.get('directory');
     if (directory && fs.existsSync(directory)) {
-      this.loadAndReadFiles(directory);
+      this.setDirectory(directory);
     }
 
     ipcRenderer.on('new-file', (event, fileContent) => {
@@ -68,6 +68,7 @@ export class AppProvider extends Component {
     activeFileInfo: null,
     mainDirectory: settings.get('directory') || null,
     currentCategory: null,
+    categoryList: [],
     fileList: [],
   };
 
@@ -84,13 +85,19 @@ export class AppProvider extends Component {
       mainDirectory: newDir,
     }, cb);
     settings.set('directory', newDir);
-    this.loadAndReadFiles(newDir);
+    this.loadCategories(newDir);
   }
 
   setFileList = (fileList, cb) => {
     this.setState({ fileList }, cb);
   }
 
+
+  /**
+    * Load categories (directories) in the given directory and write to state.
+    *
+    * @param {string} directory Directory to scan for files.
+    */
   loadCategories = async (directory) => {
     // read directories in the given directory
     const mainDirFiles = await readDirAsync(directory);
@@ -108,12 +115,12 @@ export class AppProvider extends Component {
 
     LOG('Sub-Directories/Categories: %o', categories);
     let category = this.state.category
-      || categories.find(e => (e.name === this.state.category.name));
+      || categories.find(e => (this.state.currentCategory && e.name === this.state.currentCategory.name));
     // if no current dir set or does not exist, then select the first one and make it the current one
     if (!category) {
       category = categories[0];
-      this.setState({ currentCategory: category });
     }
+    this.setState({ categoryList: categories, currentCategory: category });
     this.loadAndReadFiles(category.fullPath);
   }
 
@@ -127,9 +134,7 @@ export class AppProvider extends Component {
       }));
       LOG('Read Directory File List: %n%O', filesData);
 
-      this.setState({
-        fileList: filesData,
-      }, () => this.loadFile(filesData[0]));
+      this.setFileList(filesData, () => this.loadFile(filesData[0]));
     });
   }
 

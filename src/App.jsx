@@ -22,13 +22,13 @@ export default class App extends Component {
             context.state.mainDirectory ? (
               <Container fluid style={{ padding: 0 }}>
                 <Row noGutters>
-                  <Col xs="2">
+                  <Col xs="3">
                     <FileListPanel />
                   </Col>
-                  <Col xs="5">
+                  <Col xs="auto">
                     <EditorPanel />
                   </Col>
-                  <Col xs="5">
+                  <Col xs="3">
                     <MarkdownPanel />
                   </Col>
                 </Row>
