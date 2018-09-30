@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
-import { ListGroup, Nav, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { ListGroup, Nav, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import AppContext from './AppContext.jsx';
 import FileLink from './components/FileLink.jsx';
 
-// constructor(props) {
-//   super(props);
-//
-//   this.toggle = this.toggle.bind(this);
-//   this.state = {
-//     dropdownOpen: false
-//   };
-// }
-//
-// toggle() {
-//   this.setState({
-//     dropdownOpen: !this.state.dropdownOpen
-//   });
-// }
-// <Dropdown nav isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-//
+const LOG = require('debug')('mjournal:renderer:FileListPanel');
 
 /* eslint-disable react/require-optimization */
 export default class FileListPanel extends Component {
+  static propTypes = {
+    onCategoryChange: PropTypes.func.isRequired,
+  }
+
+  state = {
+    dropdownOpen: false,
+  }
+
+  toggle = () => {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen,
+    });
+  }
+
+  categorySelected = category => () => {
+    LOG('categorySelected(%o)', category);
+    this.props.onCategoryChange(category);
+  }
+
   render() {
     return (
       <AppContext.Consumer>
@@ -35,15 +40,20 @@ export default class FileListPanel extends Component {
               {categoryList.length && currentCategory ? (
                 <Nav pills>
                   <Dropdown
-                    isOpen={false} nav
-                    toggle={() => {}}
+                    isOpen={this.state.dropdownOpen}
+                    nav
+                    toggle={this.toggle}
                   >
                     <DropdownToggle caret nav>
                       Category: {currentCategory.name}
                     </DropdownToggle>
                     <DropdownMenu>
                       {categoryList.map(cat => (
-                        <DropdownItem key={cat.dirName}>{cat.name}</DropdownItem>
+                        <DropdownItem
+                          key={cat.dirName}
+                          onClick={this.categorySelected(cat.dirName)}
+                        >{cat.name}
+                        </DropdownItem>
                       ))}
                     </DropdownMenu>
                   </Dropdown>

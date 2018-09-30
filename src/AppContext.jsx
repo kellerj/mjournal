@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 if (window && window.require) {
-  // eslint-disable-next-line no-global-assign,no-native-reassign
+  // eslint-disable-next-line no-global-assign,no-native-reassign,prefer-destructuring
   require = window.require;
+  require('debug')('mjournal:renderer:AppContext')('Repointed require to window.require');
 }
 
 const util = require('util');
 const fs = require('fs');
 const path = require('path');
 const LOG = require('debug')('mjournal:renderer:AppContext');
+
 
 const readDirAsync = util.promisify(fs.readdir);
 
@@ -92,6 +94,15 @@ export class AppProvider extends Component {
     this.setState({ fileList }, cb);
   }
 
+  setCurrentCategory = (categoryDir) => {
+    const category = this.state.categoryList.find(e => (e.dirName === categoryDir));
+    if (category) {
+      this.setState({ currentCategory: category });
+      this.loadAndReadFiles(category.fullPath);
+    } else {
+      LOG('Unknown Category provided, skipping category change: %o', categoryDir);
+    }
+  }
 
   /**
     * Load categories (directories) in the given directory and write to state.
@@ -176,6 +187,7 @@ export class AppProvider extends Component {
         setFileList: this.setFileList,
         loadFile: this.loadFile,
         changeFile: this.changeFile,
+        setCurrentCategory: this.setCurrentCategory,
       }}
       >
         {this.props.children}

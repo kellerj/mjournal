@@ -23,7 +23,7 @@ export default class App extends Component {
               <Container fluid style={{ padding: 0 }}>
                 <Row noGutters>
                   <Col xs="3">
-                    <FileListPanel />
+                    <FileListPanel onCategoryChange={context.setCurrentCategory} />
                   </Col>
                   <Col xs="auto">
                     <EditorPanel />
