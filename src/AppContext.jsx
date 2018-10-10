@@ -97,8 +97,12 @@ export class AppProvider extends Component {
   setCurrentCategory = (categoryDir) => {
     const category = this.state.categoryList.find(e => (e.dirName === categoryDir));
     if (category) {
-      this.setState({ currentCategory: category });
-      this.loadAndReadFiles(category.fullPath);
+      if (category !== this.state.currentCategory) {
+        this.setState({ currentCategory: category });
+        this.loadAndReadFiles(category.fullPath);
+      } else {
+        LOG('User selected same category, skipping reload actions.');
+      }
     } else {
       LOG('Unknown Category provided, skipping category change: %o', categoryDir);
     }

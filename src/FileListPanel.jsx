@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ListGroup, Nav, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ListGroup, Nav } from 'reactstrap';
 
 import AppContext from './AppContext.jsx';
 import FileLink from './components/FileLink.jsx';
+import CategoryDropdown from './components/CategoryDropdown.jsx';
 
 const LOG = require('debug')('mjournal:renderer:FileListPanel');
 
@@ -11,16 +12,6 @@ const LOG = require('debug')('mjournal:renderer:FileListPanel');
 export default class FileListPanel extends Component {
   static propTypes = {
     onCategoryChange: PropTypes.func.isRequired,
-  }
-
-  state = {
-    dropdownOpen: false,
-  }
-
-  toggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
   }
 
   categorySelected = category => () => {
@@ -39,24 +30,10 @@ export default class FileListPanel extends Component {
             <React.Fragment>
               {categoryList.length && currentCategory ? (
                 <Nav pills>
-                  <Dropdown
-                    isOpen={this.state.dropdownOpen}
-                    nav
-                    toggle={this.toggle}
-                  >
-                    <DropdownToggle caret nav>
-                      Category: {currentCategory.name}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {categoryList.map(cat => (
-                        <DropdownItem
-                          key={cat.dirName}
-                          onClick={this.categorySelected(cat.dirName)}
-                        >{cat.name}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </Dropdown>
+                  <CategoryDropdown
+                    categoryList={categoryList} currentCategory={currentCategory}
+                    onSelect={this.props.onCategoryChange}
+                  />
                 </Nav>) : ''}
               <ListGroup flush>
                 {fileList.map(file => (

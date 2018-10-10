@@ -13,8 +13,8 @@
 	- [x] widen the file list column
 	- [x] add current directory to state
 	- [x] implement directory switch function
-	- [ ] Make this into a component
-	- [ ] Ignore category change if current category
+	- [x] Make this into a component
+	- [x] Ignore category change if current category
 	- [ ] write tests for component
 		- [ ] renders list
 		- [ ] calls change handler when new folder selected
