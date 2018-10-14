@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 if (window && window.require) {
   // eslint-disable-next-line no-global-assign,no-native-reassign,prefer-destructuring
   require = window.require;
+  // eslint-disable-next-line global-require
   require('debug')('mjournal:renderer:AppContext')('Repointed require to window.require');
 }
 
@@ -129,8 +130,9 @@ export class AppProvider extends Component {
     // If there are no directories, create a default
 
     LOG('Sub-Directories/Categories: %o', categories);
-    let category = this.state.category
-      || categories.find(e => (this.state.currentCategory && e.name === this.state.currentCategory.name));
+    let category = this.state.currentCategory;
+    // ensure we can still use the given category
+    category = categories.find(e => (category && e.name === category.name));
     // if no current dir set or does not exist, then select the first one and make it the current one
     if (!category) {
       category = categories[0];
@@ -145,7 +147,7 @@ export class AppProvider extends Component {
       const markdownFiles = files.filter(e => (e.endsWith('.md'))).sort().reverse();
       const filesData = markdownFiles.map(file => ({
         path: path.join(directory, file),
-        name: file.substr(0, file.length - 3),
+        name: file.substr(0, file.lastIndexOf('.')),
       }));
       LOG('Read Directory File List: %n%O', filesData);
 
